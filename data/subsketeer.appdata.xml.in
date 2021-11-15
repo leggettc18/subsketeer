@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 Christopher Leggett <chris@leggett.dev> -->
+<component type="desktop">
+    <id>com.github.leggettc18.subsketeer</id>
+    <metadata_license>CC0</metadata_license>
+    <name>Subsketeer</name>
+    <summary>Visualize your Subscriptions and Slash your Spending!</summary>
+    <description>
+        <p>
+            Subkseteer helps you visualize how much you are spending on your subscriptions and bills
+            so you can see where your money is going and slash your spending
+        </p>
+    </description>
+</component>

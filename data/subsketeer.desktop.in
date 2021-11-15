@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Subsketeer
+GenericName=Subscription Cost Visualizer
+Comment=Visualize how much your Subscriptions are costing you.
+Categories=Office;Finance;
+Exec=com.github.leggettc18.subsketeer
+Icon=com.github.leggettc18.subsketeer
+Terminal=false
+Type=Application
+Keywords=Subsketeer;Finance;Budget;Subscription;

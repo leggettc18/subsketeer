@@ -65,6 +65,16 @@ public class Database {
             PRAGMA user_version = 1;
             
             END TRANSACTION;
-        """
+        """;
+        
+        int ec = db.exec (query, null);
+        if (ec != Sqlite.OK) {
+            error (
+                "unable to create database schema %d: %s",
+                db.errcode (),
+                db.errmsg ()
+            );
+        }
+        return;
     }
 }

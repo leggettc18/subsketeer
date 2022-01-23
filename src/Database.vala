@@ -48,7 +48,7 @@ public class Database {
                 name            TEXT                        NOT NULL,
                 color           TEXT CHECK( pType IN ("strawberry", "orange", "banana", "lime", "mint", "blueberry", "grape", "bubblegum", "cocoa", "silver", "slate", "black") ),
                 date_created    INTEGER                     NOT NULL,
-                date_modified   INTEGER
+                date_modified   INTEGER                     NOT NULL
             );
             
             CREATE TABLE Subscription (
@@ -58,7 +58,7 @@ public class Database {
                 enabled         INTEGER                     NOT NULL,
                 category_id     INTEGER,
                 date_created    INTEGER                     NOT NULL,
-                date_modified   INTEGER,
+                date_modified   INTEGER                     NOT NULL,
                 FOREIGN KEY(category_id) REFERENCES Category(id)
             );
             
@@ -78,7 +78,7 @@ public class Database {
         return;
     }
     
-    public bool create_subscription (Subscription sub, int category_id) {
+    public bool create_subscription (Subscription sub) {
         // id is omitted because integer primary_key fields are
         // automatically autoincremented when an explicit value
         // is not supplied.
@@ -100,8 +100,12 @@ public class Database {
         stmt.bind_text (1, sub.name);
         stmt.bind_int (2, sub.amount);
         stmt.bind_int (3, sub.enabled ? 1 : 0);
-        stmt.bind_int (4, category_id);
-        stmt.bind_int64 (4, sub.date_created.to_unix ());
+        if (sub.category == null) {
+            stmt.bind_int (4, sub.category.id);
+        } else {
+            stmt.bind_null(4);
+        }
+        stmt.bind_int64 (5, sub.date_created.to_unix ());
         
         ec = stmt.step ();
         

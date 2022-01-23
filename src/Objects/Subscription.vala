@@ -4,7 +4,7 @@
  */
 
 public class Subscription {
-    private int id = null;
+    public int id = null;
     public string name;
     public int amount;
     public bool enabled;
@@ -18,10 +18,11 @@ public class Subscription {
 
     public bool persist () {
         Subsketeer.Database db = new Subsketeer.Database ();
+        db.prepare_database ();
         if (id == null) {
             return db.create_subscription (self);
         } else {
-            return db.save_subscription (self);
+            return db.save_subscription (id, self);
         }
     }
 }

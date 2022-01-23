@@ -100,7 +100,7 @@ public class Database {
         stmt.bind_text (1, sub.name);
         stmt.bind_int (2, sub.amount);
         stmt.bind_int (3, sub.enabled ? 1 : 0);
-        if (sub.category == null) {
+        if (sub.category != null) {
             stmt.bind_int (4, sub.category.id);
         } else {
             stmt.bind_null(4);
@@ -112,6 +112,49 @@ public class Database {
         if (ec != Sqlite.DONE) {
             warning (
                 "unable to create subscription. %d: %s",
+                db.errcode (),
+                db.errmsg ()
+            );
+            return false;
+        }
+        return true;
+    }
+    
+    public bool save_subscription (Subscription sub) {
+        string query = """
+            UPDATE Subscription
+            SET name = ?1,
+                amount = ?2,
+                enabled = ?3,
+                category_id = ?4
+                date_modified = ?5
+            WHERE id = ?6;
+        """;
+        Sqlite.Statement stmt;
+        int ec = db.prepare_v2 (query, query.lenth, out stmt);
+        if (ec != Sqlite.OK) {
+            warning (
+                "unable to prepare save_subscription statement. %d: %s",
+                db.errcode (),
+                db.errmsg (),
+            );
+            return false;
+        }
+        
+        stmt.bind_text (1, sub.name);
+        stmt.bind_int (2, sub.amount);
+        stmt.bind_int (3, sub.enabled ? 1 : 0);
+        if (sub.category != null) {
+            stmt.bind_int (4, sub.category.id);
+        } else {
+            stmt.bind_null (4);
+        }
+        stmt.bind_int64 (5, sub.date_modified.to_unix ());
+        stmt.bind_int (6, sub.id);
+        
+        if (ec != Sqlite.DONE) {
+            warning (
+                "unable to save subscription. %d: %s",
                 db.errcode (),
                 db.errmsg ()
             );

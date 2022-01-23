@@ -77,4 +77,42 @@ public class Database {
         }
         return;
     }
+    
+    public bool create_subscription (Subscription sub, int category_id) {
+        // id is omitted because integer primary_key fields are
+        // automatically autoincremented when an explicit value
+        // is not supplied.
+        string query = "INSERT INTO Subscription" + 
+            " (name, amount, enabled, category_id, date_created, date_modified) " + 
+            " VALUES (?1, ?2, ?3, ?4, ?5, ?5);";
+        Sqlite.Statement stmt;
+        int ec = db.prepare_v2 (query, query.length, out stmt);
+        
+        if (ec != Sqlite.OK) {
+            warning (
+                "unable to prepare create_subscription statement. %d: %s",
+                db.errcode (),
+                db.errmsg ()
+            );
+            return false;
+        }
+        
+        stmt.bind_text (1, sub.name);
+        stmt.bind_int (2, sub.amount);
+        stmt.bind_int (3, sub.enabled ? 1 : 0);
+        stmt.bind_int (4, category_id);
+        stmt.bind_int64 (4, sub.date_created.to_unix ());
+        
+        ec = stmt.step ();
+        
+        if (ec != Sqlite.DONE) {
+            warning (
+                "unable to create subscription. %d: %s",
+                db.errcode (),
+                db.errmsg ()
+            );
+            return false;
+        }
+        return true;
+    }
 }

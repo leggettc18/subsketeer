@@ -8,12 +8,16 @@ executable (
     meson.project_name(),
     'src' / 'Application.vala',
     'src' / 'MainWindow.vala',
+    'src' / 'Database.vala',
+    'src' / 'Objects' / 'Subscription.vala',
+    'src' / 'Objects' / 'Category.vala',
     dependencies: [
         dependency('gtk+-3.0'),
         dependency('libhandy-1'),
         dependency('granite'),
         dependency('gee-0.8'),
-        dependency('gdk-3.0')
+        dependency('gdk-3.0'),
+        dependency('sqlite3'),
     ],
     install: true
 )

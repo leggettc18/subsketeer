@@ -4,25 +4,32 @@
  */
 
 public class Subscription {
-    public int id = null;
+    public int? id = null;
     public string name;
     public int amount;
     public bool enabled;
-    public Subsketeer.Category category = null;
+    public Category category = null;
     public DateTime date_created;
     public DateTime date_modified;
 
     public Subscription () {
-
+        enabled = true;
     }
 
     public bool persist () {
-        Subsketeer.Database db = new Subsketeer.Database ();
-        db.prepare_database ();
+        Database db = new Database ();
         if (id == null) {
-            return db.create_subscription (self);
+            date_created = new DateTime.now ();
+            date_modified = new DateTime.now ();
+            return db.create_subscription (this);
         } else {
-            return db.save_subscription (id, self);
+            date_modified = new DateTime.now ();
+            return db.save_subscription (this);
         }
+    }
+
+    public static Subscription fetch (int id) {
+        Database db = new Database ();
+        return db.fetch_subscription (id);
     }
 }

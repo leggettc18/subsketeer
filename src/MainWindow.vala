@@ -2,7 +2,6 @@
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2021 Christopher Leggett <chris@leggett.dev>
  */
-namespace Subsketeer {
 
 public class MainWindow : Hdy.ApplicationWindow {
     Hdy.HeaderBar header_bar;
@@ -17,6 +16,8 @@ public class MainWindow : Hdy.ApplicationWindow {
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();
 
+        Subscription sub = Subscription.fetch (1);
+
         // Check if user prefers dark theme or not
         gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
 
@@ -26,7 +27,10 @@ public class MainWindow : Hdy.ApplicationWindow {
                 Granite.Settings.ColorScheme.DARK;
         });
         info ("creating label");
-        label = new Gtk.Label (_("Hello World!"));
+        if (sub == null) {
+            error ("subscription cannot be null");
+        }
+        label = new Gtk.Label (sub.name);
         info ("creating main layout");
         main_layout = new Gtk.Grid () {
             expand = true
@@ -57,6 +61,4 @@ public class MainWindow : Hdy.ApplicationWindow {
         show_all ();
         info ("returning main window");
     }
-}
-
 }

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2021 Christopher Leggett <chris@leggett.dev>
  */
-namespace Subsketeer {
+
 public class SubsketeerApp : Gtk.Application {
     public string[] args;
     public SubsketeerApp () {
@@ -15,6 +15,18 @@ public class SubsketeerApp : Gtk.Application {
     protected override void activate () {
         Granite.Services.Logger.initialize ("Subsketeer");
         Granite.Services.Logger.DisplayLevel = Granite.Services.LogLevel.INFO;
+        Database db = new Database ();
+        if (db.check_database_exists()) {
+            // not first run
+        } else {
+            // first run
+            db.setup ();
+            Subscription sub = new Subscription () {
+                name = "Test",
+                amount = 300
+            };
+            sub.persist ();
+        }
         //Hdy.init ();
         info ("creating main window");
         var main_window = new MainWindow () {
@@ -40,4 +52,4 @@ public class SubsketeerApp : Gtk.Application {
         info ("app finished running: %d", result);
     }
 }
-}
+
